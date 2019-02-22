@@ -1,0 +1,48 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class Lab {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        List<Integer> pokemonLength = Arrays.stream(scanner.nextLine()
+                .split("\\s+"))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+
+        int sum = 0;
+        while (pokemonLength.size() > 0) {
+            int indexes = Integer.parseInt(scanner.nextLine());
+            int firstIndex = pokemonLength.get(0);
+            int lastIndex = pokemonLength.get(pokemonLength.size() - 1);
+
+            if (indexes < 0) {
+                pokemonLength.set(0, pokemonLength.get(pokemonLength.size() - 1));
+                sum = getSum(pokemonLength, sum, firstIndex);
+
+            }
+            if (indexes >= pokemonLength.size()) {
+                pokemonLength.set(pokemonLength.size() - 1, pokemonLength.get(0));
+                sum = getSum(pokemonLength, sum, lastIndex);
+            }
+            if (indexes >= 0 && indexes <= pokemonLength.size() - 1) {
+                int num = pokemonLength.get(indexes);
+                pokemonLength.remove(indexes);
+                sum = getSum(pokemonLength, sum, num);
+            }
+        }
+        System.out.println(sum);
+    }
+
+    private static int getSum(List<Integer> pokemonLength, int sum, int firstIndex) {
+        sum += firstIndex;
+        for (int i = 0; i < pokemonLength.size(); i++) {
+            if (pokemonLength.get(i) <= firstIndex) {
+                pokemonLength.set(i, pokemonLength.get(i) + firstIndex);
+            } else {
+                pokemonLength.set(i, pokemonLength.get(i) - firstIndex);
+            }
+        }
+        return sum;
+    }
+}
