@@ -1,0 +1,82 @@
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+public class Lab {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        List<String> program = Arrays.stream(scanner.nextLine()
+                .split(", "))
+                .collect(Collectors.toList());
+        String command = scanner.nextLine();
+        while (!command.equals("course start")) {
+            String[] commandSplit = command.split(":");
+            String action = commandSplit[0];
+            String newSubject = commandSplit[1];
+            switch (action) {
+                case "Add":
+
+                    if (!program.contains(newSubject)) {
+                        program.add(newSubject);
+                    }
+                    break;
+                case "Remove":
+                    if (program.contains(newSubject)) {
+                        program.remove(newSubject);
+                    }
+                    break;
+                case "Exercise":
+                    String adhesion = "";
+                    adhesion += String.format(newSubject + "-" + action);
+                    if (!program.contains(newSubject) || !program.contains(adhesion)){
+                    if (!program.contains(newSubject)) {
+                        program.add(newSubject);
+                        program.add(adhesion);
+                    } else {
+                        int index = program.indexOf(newSubject);
+                        program.add(index + 1, adhesion);
+                    }
+                    }
+                    break;
+                case "Insert":
+                    int index = Integer.parseInt(commandSplit[2]);
+                    if (index >= 0 && index < program.size()) {
+                        if (!program.contains(newSubject)) {
+                            program.add(index, newSubject);
+                        }
+                    }
+                    break;
+                case "Swap":
+                    String newSubject2 = commandSplit[2];
+                    if (program.contains(newSubject) && program.contains(newSubject2)) {
+                        int index1 = program.indexOf(newSubject);
+                        int index2 = program.indexOf(newSubject2);
+                        Collections.swap(program, index1, index2);
+                        String verification11 = String.format(newSubject + "-" + "Exercise");
+                        String verification12 = String.format(newSubject2 + "-" + "Exercise");
+                        if (program.contains(verification11)) {
+                            int indexVer = program.indexOf(verification11);
+                            program.set(program.indexOf(newSubject) + 1, verification11);
+                            program.remove(indexVer);
+                        }
+                        if (program.contains(verification12)) {
+                            int indexVer = program.indexOf(verification12);
+                            program.add(program.indexOf(newSubject2) + 1, verification12);
+                            program.remove(indexVer + 1);
+                        }
+                    }
+                    break;
+            }
+            command = scanner.nextLine();
+        }
+        int count = 1;
+        for (String s : program) {
+            System.out.println(String.format("%d.%s", count, s));
+            count++;
+        }
+    }
+}
