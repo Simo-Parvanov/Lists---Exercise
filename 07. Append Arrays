@@ -1,0 +1,20 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class Lab {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        List<String> nn = Arrays.stream(scanner.nextLine()
+                .split("[|]"))
+                .collect(Collectors.toList());
+
+        Collections.reverse(nn);
+        String listString = String.join(" ", nn);
+        String[] listSplit = listString.split("\\s+");
+        for (String s : listSplit) {
+
+                System.out.print(s + " ");
+        }
+    }
+}
